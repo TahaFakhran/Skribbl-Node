@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
+var mongoose = require('mongoose');
 var socket = require("socket.io");
 
 const port = process.env.PORT || 5000;
@@ -46,3 +46,36 @@ io.on('connection', function (socket) {
     });
 });
 
+
+//chat
+
+mongoose.connect('mongodb://localhost:27017/chatDB', { useUnifiedTopology: true, useNewUrlParser: true });
+console.log('MongoDB connected...');
+
+var Schema = mongoose.Schema;
+
+var chatSchema = new Schema({
+    user: String,
+    message: String,
+    //date : { type : Date, default : Date.now } 
+});
+
+var ChatModel = mongoose.model('chat', chatSchema);
+
+io.on('connection', function (socket) {
+
+    ChatModel.find({}, function (err, res) {
+        //ChatModel.find({}).sort({'user': 1}).limit(10).exec(function (err, res) { });  //sorting par ordre croissant //res length 10
+        //ChatModel.find({}).sort({ 'user': -1 }).limit(10).exec(function (err, res) { }); //sorting par ordre decroissant //res length 10
+        if (err) {
+            throw err;
+        }
+        socket.emit('output', res);
+    });
+
+    socket.on('input', function (data) {
+        ChatModel.create(data, function () {
+            io.emit('output', data);
+        });
+    });
+});

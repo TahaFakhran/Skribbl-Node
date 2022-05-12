@@ -3,59 +3,71 @@
 
 <head>
     <meta charset="utf-8">
-    <title>The drawing game</title>
+    <title>Scribbl</title>
     <link rel="stylesheet" href="./css/drawing.css">
 </head>
 
 <body>
-
-    <canvas id="the-canvas" width="500" height="500"></canvas>
-    <table class="topSection">
-        <tr>
-            <td id="c0000ff"></td>
-            <td id="c009fff"></td>
-            <td id="c0fffff"></td>
-            <td id="cbfffff"></td>
-            <td id="c000000"></td>
-            <td id="c333333"></td>
-            <td id="2pixel">2px</td>
-        </tr>
-        <tr>
-            <td id="c666666"></td>
-            <td id="c999999"></td>
-            <td id="cffcc66"></td>
-            <td id="cffcc00"></td>
-            <td id="cffff00"></td>
-            <td id="cffff99"></td>
-            <td id="5pixel">5px</td>
-        </tr>
-        <tr>
-            <td id="c003300"></td>
-            <td id="c555000"></td>
-            <td id="c00ff00"></td>
-            <td id="c99ff99"></td>
-            <td id="cf00000"></td>
-            <td id="cff6600"></td>
-            <td id="10pixel">10px</td>
-        </tr>
-        <tr>
-            <td id="cff9933"></td>
-            <td id="cf5deb3"></td>
-            <td id="c330000"></td>
-            <td id="c663300"></td>
-            <td id="ccc6600"></td>
-            <td id="cdeb887"></td>
-            <td id="15pixel">15px</td>
-        </tr>
-        <tr>
-            <td id="caa0fff"></td>
-            <td id="ccc66cc"></td>
-            <td id="cff66ff"></td>
-            <td id="cff99ff"></td>
-            <td id="ce8c4e8"></td>
-            <td id="cffffff"></td>
-            <td id="reset">Reset</td>
-        </tr>
+    <div id="left">
+        <canvas id="the-canvas" width="500" height="500"></canvas>
+        <table class="topSection">
+            <tr>
+                <td id="c0000ff"></td>
+                <td id="c009fff"></td>
+                <td id="c0fffff"></td>
+                <td id="cbfffff"></td>
+                <td id="c000000"></td>
+                <td id="c333333"></td>
+                <td id="2pixel">2px</td>
+            </tr>
+            <tr>
+                <td id="c666666"></td>
+                <td id="c999999"></td>
+                <td id="cffcc66"></td>
+                <td id="cffcc00"></td>
+                <td id="cffff00"></td>
+                <td id="cffff99"></td>
+                <td id="5pixel">5px</td>
+            </tr>
+            <tr>
+                <td id="c003300"></td>
+                <td id="c555000"></td>
+                <td id="c00ff00"></td>
+                <td id="c99ff99"></td>
+                <td id="cf00000"></td>
+                <td id="cff6600"></td>
+                <td id="10pixel">10px</td>
+            </tr>
+            <tr>
+                <td id="cff9933"></td>
+                <td id="cf5deb3"></td>
+                <td id="c330000"></td>
+                <td id="c663300"></td>
+                <td id="ccc6600"></td>
+                <td id="cdeb887"></td>
+                <td id="15pixel">15px</td>
+            </tr>
+            <tr>
+                <td id="caa0fff"></td>
+                <td id="ccc66cc"></td>
+                <td id="cff66ff"></td>
+                <td id="cff99ff"></td>
+                <td id="ce8c4e8"></td>
+                <td id="cffffff"></td>
+                <td id="reset">Reset</td>
+            </tr>
+    </div>
+    <div id="right">
+        <div id="chat">
+            <h1>Chat</h1>
+            <div id="messages">
+                <div id="output"></div>
+            </div>
+            <input id="user" type="text" placeholder="User" onClick="this.select();" />
+            <input id="message" type="text" placeholder="Message" onClick="this.select();" />
+            <button id="send">Send</button>
+        </div>
+    </div>
 </body>
 <script>
     var drawColor = "";
@@ -73,10 +85,10 @@
         ctx.closePath();
         ctx.stroke();
     }
-
 </script>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="./js/chat.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     var socket = io();
@@ -248,8 +260,6 @@
     $("#reset").click(function () {
         ctx.clearRect(0, 0, 500, 500);
     });
-
-
 </script>
 
 

@@ -134,3 +134,71 @@ td {
 #cffffff {
     background-color: #ffffff
 }
+
+
+/*position*/
+
+#left {
+    float: left;
+}
+
+#right {
+    float: right;
+}
+
+
+/*chat*/
+
+h1 {
+    padding: 4px 50px;
+    color: #2c3085;
+}
+
+input {
+    background: #fff;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: 0;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    font-size: 14px;
+}
+
+button {
+    background: navy;
+    color: #fff;
+    font-size: 20px;
+    border: 0;
+    padding: 10px 0;
+    width: 100%;
+}
+
+#chat {
+    max-width: 500px;
+    border: 1px solid navy;
+}
+
+#messages {
+    height: 400px;
+    overflow: auto;
+    background: rgb(248, 248, 248);
+}
+
+#output p {
+    padding: 10px 0px;
+    margin: 0 12px;
+    border-bottom: 1px solid e#eee;
+}
+
+#output strong {
+    color: mediumblue;
+}
+
+p.light {
+    color: lightgray;
+}
+
+#output strong.light {
+    color: rgb(166, 166, 204);
+}
