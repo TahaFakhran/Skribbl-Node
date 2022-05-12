@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>The drawing game</title>
+    <link rel="stylesheet" href="./css/drawing.css">
+</head>
+
+<body>
+
+    <canvas id="the-canvas" width="500" height="500"></canvas>
+    <table class="topSection">
+        <tr>
+            <td id="c0000ff"></td>
+            <td id="c009fff"></td>
+            <td id="c0fffff"></td>
+            <td id="cbfffff"></td>
+            <td id="c000000"></td>
+            <td id="c333333"></td>
+            <td id="2pixel">2px</td>
+        </tr>
+        <tr>
+            <td id="c666666"></td>
+            <td id="c999999"></td>
+            <td id="cffcc66"></td>
+            <td id="cffcc00"></td>
+            <td id="cffff00"></td>
+            <td id="cffff99"></td>
+            <td id="5pixel">5px</td>
+        </tr>
+        <tr>
+            <td id="c003300"></td>
+            <td id="c555000"></td>
+            <td id="c00ff00"></td>
+            <td id="c99ff99"></td>
+            <td id="cf00000"></td>
+            <td id="cff6600"></td>
+            <td id="10pixel">10px</td>
+        </tr>
+        <tr>
+            <td id="cff9933"></td>
+            <td id="cf5deb3"></td>
+            <td id="c330000"></td>
+            <td id="c663300"></td>
+            <td id="ccc6600"></td>
+            <td id="cdeb887"></td>
+            <td id="15pixel">15px</td>
+        </tr>
+        <tr>
+            <td id="caa0fff"></td>
+            <td id="ccc66cc"></td>
+            <td id="cff66ff"></td>
+            <td id="cff99ff"></td>
+            <td id="ce8c4e8"></td>
+            <td id="cffffff"></td>
+            <td id="reset">Reset</td>
+        </tr>
+</body>
+<script>
+    var drawColor = "";
+    var drawWidth = 3;
+    var canvas = document.getElementById('the-canvas');
+    var ctx = canvas.getContext('2d');
+
+    function drawLine(startX, startY, stopX, stopY, theColor, theWidth) {
+        ctx.strokeStyle = theColor;
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = theWidth;
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(stopX, stopY);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+</script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    var socket = io();
+    //Jquery code goes here.
+    var startX;
+    var startY;
+    var mouseState = false;
+    $('#the-canvas').mousedown(function (event) {
+        mouseState = true;
+        startX = event.clientX;
+        startY = event.clientY;
+    });
+
+
+
+    $("#the-canvas").mousemove(function (event) {
+        if (mouseState === true) {
+            var moveX = event.clientX;
+            var moveY = event.clientY;
+            var stopX = moveX;
+            var stopY = moveY;
+            drawLine(startX, startY, stopX, stopY, drawColor, drawWidth);
+            socket.emit('first-draw', {
+                startCoordX: startX,
+                startCoordY: startY,
+                stopCoordX: stopX,
+                stopCoordY: stopY,
+                lineColor: drawColor,
+                lineWidth: drawWidth
+            });
+            startX = stopX;
+            startY = stopY;
+        }
+    });
+
+    $('#the-canvas').mouseup(function () {
+        mouseState = false;
+    });
+
+    socket.on('get-canvas', function () {
+        var imgUrl = canvas.toDataURL();
+        socket.emit('send-canvas', imgUrl);
+    });
+    socket.on('receive-canvas', function (imgUrl) {
+        console.log(imgUrl.length);
+        var image = new Image();
+        image.onload = function () {
+            canvas.width = image.width;
+            canvas.height = image.height;
+            canvas.getContext("2d").drawImage(image, 0, 0);
+        };
+        image.src = imgUrl;
+        ctx.drawImage(image, 500, 500)
+        console.log(image);
+    });
+
+    socket.on("first-draw", function (drawObject) {
+        var startX2 = drawObject.startCoordX;
+        var startY2 = drawObject.startCoordY;
+        var stopX2 = drawObject.stopCoordX;
+        var stopY2 = drawObject.stopCoordY;
+        var theColor = drawObject.lineColor;
+        var theWidth = drawObject.lineWidth;
+        drawLine(startX2, startY2, stopX2, stopY2, theColor, theWidth);
+    });
+
+    $('#c0000ff').click(function () {
+        drawColor = "#0000ff";
+    });
+    $('#c009fff').click(function () {
+        drawColor = "#009fff";
+    });
+    $('#c0fffff').click(function () {
+        drawColor = "#00ffff";
+    });
+    $('#cbfffff').click(function () {
+        drawColor = "#bfffff";
+    });
+    $('#c000000').click(function () {
+        drawColor = "#000000";
+    });
+    $('#c333333').click(function () {
+        drawColor = "#333333";
+    });
+    $('#c666666').click(function () {
+        drawColor = "#666666";
+    });
+    $('#c999999').click(function () {
+        drawColor = "#999999";
+    });
+    $('#cffcc66').click(function () {
+        drawColor = "#ffcc66";
+    });
+    $('#cffcc00').click(function () {
+        drawColor = "#ffcc00";
+    });
+    $('#cffff00').click(function () {
+        drawColor = "#ffff00";
+    });
+    $('#cffff99').click(function () {
+        drawColor = "#ffff99";
+    });
+    $('#c003300').click(function () {
+        drawColor = "#003300";
+    });
+    $('#c555000').click(function () {
+        drawColor = "#555000";
+    });
+    $('#c00ff00').click(function () {
+        drawColor = "#00ff00";
+    });
+    $('#c99ff99').click(function () {
+        drawColor = "#99ff99";
+    });
+    $('#cf00000').click(function () {
+        drawColor = "#f00000";
+    });
+    $('#cff6600').click(function () {
+        drawColor = "#ff6600";
+    });
+    $('#cff9933').click(function () {
+        drawColor = "#ff9933";
+    });
+    $('#cf5deb3').click(function () {
+        drawColor = "#f5deb3";
+    });
+    $('#c330000').click(function () {
+        drawColor = "#330000";
+    });
+    $('#c663300').click(function () {
+        drawColor = "#663300";
+    });
+    $('#ccc6600').click(function () {
+        drawColor = "#cc6600";
+    });
+    $('#cdeb887').click(function () {
+        drawColor = "#deb887";
+    });
+    $('#caa0fff').click(function () {
+        drawColor = "#aa0fff";
+    });
+    $('#ccc66cc').click(function () {
+        drawColor = "#cc66cc";
+    });
+    $('#cff66ff').click(function () {
+        drawColor = "#ff66ff";
+    });
+    $('#cff99ff').click(function () {
+        drawColor = "#ff99ff";
+    });
+    $('#ce8c4e8').click(function () {
+        drawColor = "#e8c4e8";
+    });
+    $('#cffffff').click(function () {
+        drawColor = "#ffffff";
+    });
+    $('#2pixel').click(function () {
+        drawWidth = 2;
+    });
+    $('#5pixel').click(function () {
+        drawWidth = 5;
+    });
+    $('#10pixel').click(function () {
+        drawWidth = 10;
+    });
+    $('#15pixel').click(function () {
+        drawWidth = 15;
+    });
+    $("#reset").click(function () {
+        ctx.clearRect(0, 0, 500, 500);
+    });
+
+
+</script>
+
+
+</html>

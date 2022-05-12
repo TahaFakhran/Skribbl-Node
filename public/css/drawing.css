@@ -1,0 +1,136 @@
+#the-canvas {
+    border: solid 2px black;
+}
+
+.topSection {
+    height: 30px;
+    width: 500px
+}
+
+td {
+    border: 2px solid black;
+    width: 34px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#c0000ff {
+    background-color: #0000ff;
+}
+
+#c009fff {
+    background-color: #009fff;
+}
+
+#c0fffff {
+    background-color: #0fffff;
+}
+
+#cbfffff {
+    background-color: #bfffff
+}
+
+#c000000 {
+    background-color: #000000
+}
+
+#c333333 {
+    background-color: #333333
+}
+
+#c666666 {
+    background-color: #666666
+}
+
+#c999999 {
+    background-color: #999999
+}
+
+#cffcc66 {
+    background-color: #ffcc66
+}
+
+#cffcc00 {
+    background-color: #ffcc00
+}
+
+#cffff00 {
+    background-color: #ffff00
+}
+
+#cffff99 {
+    background-color: #ffff99
+}
+
+#c003300 {
+    background-color: #003300
+}
+
+#c555000 {
+    background-color: #555000
+}
+
+#c00ff00 {
+    background-color: #00ff00
+}
+
+#c99ff99 {
+    background-color: #99ff99
+}
+
+#cf00000 {
+    background-color: #f00000
+}
+
+#cff6600 {
+    background-color: #ff6600
+}
+
+#cff9933 {
+    background-color: #ff9933
+}
+
+#cf5deb3 {
+    background-color: #f5deb3
+}
+
+#c330000 {
+    background-color: #330000
+}
+
+#c663300 {
+    background-color: #663300
+}
+
+#ccc6600 {
+    background-color: #cc6600
+}
+
+#cdeb887 {
+    background-color: #deb887
+}
+
+#caa0fff {
+    background-color: #aa0fff
+}
+
+#ccc66cc {
+    background-color: #cc66cc
+}
+
+#cff66ff {
+    background-color: #ff66ff
+}
+
+#cff99ff {
+    background-color: #ff99ff
+}
+
+#ce8c4e8 {
+    background-color: #e8c4e8
+}
+
+#cffffff {
+    background-color: #ffffff
+}

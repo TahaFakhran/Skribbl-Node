@@ -1,0 +1,21 @@
+{
+  "name": "skribbl",
+  "version": "1.0.0",
+  "description": "sbribbl project Taha/Freds",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "paint"
+  ],
+  "author": "Taha/Freds",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.3",
+    "socket.io": "^4.5.0"
+  }
+}
