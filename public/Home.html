@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Scribbl</title>
+    <link rel="stylesheet" href="./css/drawing.css">
+</head>
+
+<body onload="getParams()">
+    <div id="left">
+        <canvas id="the-canvas" width="500" height="500"></canvas>
+        <table class="topSection">
+            <tr>
+                <td id="c0000ff"></td>
+                <td id="c009fff"></td>
+                <td id="c0fffff"></td>
+                <td id="cbfffff"></td>
+                <td id="c000000"></td>
+                <td id="c333333"></td>
+                <td id="2pixel">2px</td>
+            </tr>
+            <tr>
+                <td id="c666666"></td>
+                <td id="c999999"></td>
+                <td id="cffcc66"></td>
+                <td id="cffcc00"></td>
+                <td id="cffff00"></td>
+                <td id="cffff99"></td>
+                <td id="5pixel">5px</td>
+            </tr>
+            <tr>
+                <td id="c003300"></td>
+                <td id="c555000"></td>
+                <td id="c00ff00"></td>
+                <td id="c99ff99"></td>
+                <td id="cf00000"></td>
+                <td id="cff6600"></td>
+                <td id="10pixel">10px</td>
+            </tr>
+            <tr>
+                <td id="cff9933"></td>
+                <td id="cf5deb3"></td>
+                <td id="c330000"></td>
+                <td id="c663300"></td>
+                <td id="ccc6600"></td>
+                <td id="cdeb887"></td>
+                <td id="15pixel">15px</td>
+            </tr>
+            <tr>
+                <td id="caa0fff"></td>
+                <td id="ccc66cc"></td>
+                <td id="cff66ff"></td>
+                <td id="cff99ff"></td>
+                <td id="ce8c4e8"></td>
+                <td id="cffffff"></td>
+                <td id="reset">Reset</td>
+            </tr>
+    </div>
+
+    <div id="center">
+        <h2 id="userType"></h2>
+        <input id="turn" type="hidden" autocomplete="off" />
+        <input id="numb" type="hidden" autocomplete="off" />
+
+        <input id="wordToGuess" placeholder="Word to Guess" type="text" autocomplete="off" style="display:none ;" />
+        <button id="btnWordToGuess" style="display:none ;" onclick="btnSubmitWord();">Submit</button>
+    </div>
+
+    <div id="right">
+        <div id="chat">
+            <h1>Chat</h1>
+            <div id="messages">
+                <div id="output"></div>
+            </div>
+            <input id="user" type="hidden" placeholder="User" autocomplete="off" onClick="this.select();" />
+            <input id="message" type="text" placeholder="Your Guess..." autocomplete="off" onClick="this.select();" />
+            <button id="send">Send</button>
+        </div>
+    </div>
+
+</body>
+<script>
+    function getParams() {
+        const queryString = window.location.search;
+
+        const urlParams = new URLSearchParams(queryString);
+
+        const page_name = urlParams.get('name')
+
+        document.getElementById("user").value = page_name;
+    }
+
+</script>
+
+<script>
+    var drawColor = "";
+    var drawWidth = 3;
+    var canvas = document.getElementById('the-canvas');
+    var ctx = canvas.getContext('2d');
+
+    function drawLine(startX, startY, stopX, stopY, theColor, theWidth) {
+        ctx.strokeStyle = theColor;
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = theWidth;
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(stopX, stopY);
+        ctx.closePath();
+        ctx.stroke();
+    }
+</script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="./js/chat.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="./js/drawing.js"></script>
+<script>
+    // var socket = io();
+    //Jquery code goes here.
+    var startX;
+    var startY;
+    var mouseState = false;
+    $('#the-canvas').mousedown(function (event) {
+        mouseState = true;
+        startX = event.clientX;
+        startY = event.clientY;
+    });
+    // user tunn
+    var userTurn;
+    var userNumb;
+
+    socket.on('userTurn', (data) => {
+        userTurn = data;
+        document.getElementById('turn').value = data;
+    });
+
+    socket.on('userNumb', (data) => {
+        userNumb = data;
+        document.getElementById('numb').value = data;
+    });
+
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const yourFunction = async () => {
+        await delay(1000);
+        if (document.getElementById('numb').value == document.getElementById('turn').value) {
+            document.getElementById('userType').innerHTML = "You are the drawer";
+            document.getElementById('wordToGuess').style.display = 'block';
+            document.getElementById('btnWordToGuess').style.display = 'block';
+        } else if (document.getElementById('numb').value != document.getElementById('turn').value) {
+            document.getElementById('userType').innerHTML = "Guess the drawing";
+        }
+    };
+
+    yourFunction();
+
+    $("#the-canvas").mousemove(function (event) {
+        if (userNumb == userTurn) {
+            if (mouseState === true) {
+                var moveX = event.clientX;
+                var moveY = event.clientY;
+                var stopX = moveX;
+                var stopY = moveY;
+                drawLine(startX, startY, stopX, stopY, drawColor, drawWidth);
+                console.log(userNumb)
+
+
+                socket.emit('first-draw', {
+                    startCoordX: startX,
+                    startCoordY: startY,
+                    stopCoordX: stopX,
+                    stopCoordY: stopY,
+                    lineColor: drawColor,
+                    lineWidth: drawWidth
+                });
+
+                startX = stopX;
+                startY = stopY;
+            }
+        }
+    });
+
+
+
+    $('#the-canvas').mouseup(function () {
+        mouseState = false;
+    });
+
+    socket.on('get-canvas', function () {
+        var imgUrl = canvas.toDataURL();
+        socket.emit('send-canvas', imgUrl);
+    });
+    socket.on('receive-canvas', function (imgUrl) {
+        console.log(imgUrl.length);
+        var image = new Image();
+        image.onload = function () {
+            canvas.width = image.width;
+            canvas.height = image.height;
+            canvas.getContext("2d").drawImage(image, 0, 0);
+        };
+        image.src = imgUrl;
+        ctx.drawImage(image, 500, 500);
+    });
+
+    socket.on("first-draw", function (drawObject) {
+        var startX2 = drawObject.startCoordX;
+        var startY2 = drawObject.startCoordY;
+        var stopX2 = drawObject.stopCoordX;
+        var stopY2 = drawObject.stopCoordY;
+        var theColor = drawObject.lineColor;
+        var theWidth = drawObject.lineWidth;
+        drawLine(startX2, startY2, stopX2, stopY2, theColor, theWidth);
+    });
+
+    function btnSubmitWord() {
+        var word = document.getElementById('wordToGuess').value;
+        document.getElementById('wordToGuess').disabled = true;
+        document.getElementById('btnWordToGuess').style.display = "none";
+
+        socket.emit('guess', word);
+    }
+
+</script>
+
+
+</html>
