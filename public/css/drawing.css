@@ -139,13 +139,18 @@ td {
 /*position*/
 
 #left {
-    float: left;
+    display: flex;
+    align-items: flex-start;
 }
 
 #right {
     position: absolute;
-    margin-left: 80%;
-    margin-top: -38%;
+    right: 0;
+    top:0;
+}
+
+#center {
+    margin-left: 30px;
 }
 
 
@@ -210,10 +215,3 @@ p.correct{
     color: rgb(72, 226, 72);
 }
 
-/* center */
-
-#center {
-    position: absolute;
-    margin-left: 45%;
-    margin-top: -38%;
-}

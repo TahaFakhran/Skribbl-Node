@@ -10,6 +10,17 @@
 <body onload="getParams()">
     <div id="left">
         <canvas id="the-canvas" width="500" height="500"></canvas>
+
+        <div id="center">
+            <h2 id="userType"></h2>
+            <input id="turn" type="hidden" autocomplete="off" />
+            <input id="numb" type="hidden" autocomplete="off" />
+    
+            <input id="wordToGuess" placeholder="Word to Guess" type="text" autocomplete="off" style="display:none ;" />
+            <button id="btnWordToGuess" style="display:none ;" onclick="btnSubmitWord();">Submit</button>
+        </div>
+    </div>
+    <div id="left">
         <table class="topSection">
             <tr>
                 <td id="c0000ff"></td>
@@ -58,14 +69,7 @@
             </tr>
     </div>
 
-    <div id="center">
-        <h2 id="userType"></h2>
-        <input id="turn" type="hidden" autocomplete="off" />
-        <input id="numb" type="hidden" autocomplete="off" />
-
-        <input id="wordToGuess" placeholder="Word to Guess" type="text" autocomplete="off" style="display:none ;" />
-        <button id="btnWordToGuess" style="display:none ;" onclick="btnSubmitWord();">Submit</button>
-    </div>
+    
 
     <div id="right">
         <div id="chat">

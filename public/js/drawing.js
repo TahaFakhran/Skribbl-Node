@@ -101,5 +101,10 @@ $('#15pixel').click(function () {
     drawWidth = 15;
 });
 $("#reset").click(function () {
+    if (userNumb == userTurn) {
     ctx.clearRect(0, 0, 500, 500);
+
+    var imgUrl = canvas.toDataURL();
+    socket.emit('send-canvas', imgUrl);
+    }
 });
