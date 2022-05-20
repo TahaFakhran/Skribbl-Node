@@ -65,6 +65,10 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('A user has disconnected');
         userNum--;
+
+        if (userNum == 0) {
+            newUsers = [];
+        }
     });
     socket.on('first-draw', function (drawObject) {
         socket.broadcast.emit('first-draw', drawObject);
