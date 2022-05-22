@@ -7,6 +7,7 @@ var btn = document.getElementById('send');
 var output = document.getElementById('output');
 var guess;
 
+// sur le boutton on click
 btn.addEventListener('click', function () {
 
     socket.emit('input', {
@@ -21,6 +22,8 @@ btn.addEventListener('click', function () {
     message.value = '';
 
 });
+
+// pour afficher les messages
 socket.on('output', function (data) {
     if (data.length > 1) {
         for (var i = 0; i < data.length; i++)
@@ -32,6 +35,7 @@ socket.on('output', function (data) {
 
 });
 
+// chercher le mot guess
 socket.on('guess', (data) => {
     guess = data;
 });

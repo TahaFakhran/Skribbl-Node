@@ -15,7 +15,7 @@
             <h2 id="userType"></h2>
             <input id="turn" type="hidden" autocomplete="off" />
             <input id="numb" type="hidden" autocomplete="off" />
-    
+
             <input id="wordToGuess" placeholder="Word to Guess" type="text" autocomplete="off" style="display:none ;" />
             <button id="btnWordToGuess" style="display:none ;" onclick="btnSubmitWord();">Submit</button>
         </div>
@@ -69,7 +69,7 @@
             </tr>
     </div>
 
-    
+
 
     <div id="right">
         <div id="chat">
@@ -85,13 +85,11 @@
 
 </body>
 <script>
+    // chercher le nom du user de la page precedente
     function getParams() {
         const queryString = window.location.search;
-
         const urlParams = new URLSearchParams(queryString);
-
         const page_name = urlParams.get('name')
-
         document.getElementById("user").value = page_name;
     }
 
@@ -103,6 +101,7 @@
     var canvas = document.getElementById('the-canvas');
     var ctx = canvas.getContext('2d');
 
+    // fonction pour dessiner
     function drawLine(startX, startY, stopX, stopY, theColor, theWidth) {
         ctx.strokeStyle = theColor;
         ctx.lineJoin = 'round';
@@ -134,16 +133,19 @@
     var userTurn;
     var userNumb;
 
+    // chercher c'est le tour de qui
     socket.on('userTurn', (data) => {
         userTurn = data;
         document.getElementById('turn').value = data;
     });
 
+    // chercher le numero du user
     socket.on('userNumb', (data) => {
         userNumb = data;
         document.getElementById('numb').value = data;
     });
 
+    // pour afficher qui doit dessiner et qui doit deviner
     const delay = ms => new Promise(res => setTimeout(res, ms));
     const yourFunction = async () => {
         await delay(1000);
@@ -159,6 +161,7 @@
     yourFunction();
 
     $("#the-canvas").mousemove(function (event) {
+        // seulement le userturn peut dessiner et le reste ne peut pas
         if (userNumb == userTurn) {
             if (mouseState === true) {
                 var moveX = event.clientX;
@@ -190,10 +193,12 @@
         mouseState = false;
     });
 
+    // chercher le canvas et le renvoyer
     socket.on('get-canvas', function () {
         var imgUrl = canvas.toDataURL();
         socket.emit('send-canvas', imgUrl);
     });
+    // recevoir le canvas 
     socket.on('receive-canvas', function (imgUrl) {
         console.log(imgUrl.length);
         var image = new Image();
@@ -206,6 +211,7 @@
         ctx.drawImage(image, 500, 500);
     });
 
+    // pour dessiner
     socket.on("first-draw", function (drawObject) {
         var startX2 = drawObject.startCoordX;
         var startY2 = drawObject.startCoordY;
@@ -216,6 +222,7 @@
         drawLine(startX2, startY2, stopX2, stopY2, theColor, theWidth);
     });
 
+    // pour enovoyer le mot choisit aux reste des users
     function btnSubmitWord() {
         var word = document.getElementById('wordToGuess').value;
         document.getElementById('wordToGuess').disabled = true;
